@@ -1,10 +1,17 @@
 import pickle
+import os
 
 def load_model():
-    with open('artifacts/model.pkl', 'rb') as f:
+    model_path = "artifacts/model.pkl"
+    vectorizer_path = "artifacts/vectorizer.pkl"
+
+    if not os.path.exists(model_path) or not os.path.exists(vectorizer_path):
+        raise FileNotFoundError("Model files not found. Run train.py first.")
+
+    with open(model_path, "rb") as f:
         model = pickle.load(f)
 
-    with open('artifacts/vectorizer.pkl', 'rb') as f:
+    with open(vectorizer_path, "rb") as f:
         vectorizer = pickle.load(f)
 
     return model, vectorizer

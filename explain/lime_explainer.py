@@ -8,5 +8,11 @@ def explain_lime(text, model, vectorizer):
     def predict_proba(texts):
         return model.predict_proba(vectorizer.transform(texts))
 
-    exp = explainer.explain_instance(text, predict_proba, num_features=10)
+    exp = explainer.explain_instance(
+        text,
+        predict_proba,
+        num_features=10,
+        num_samples=1000  # 🔥 stabilizes output
+    )
+
     return exp
