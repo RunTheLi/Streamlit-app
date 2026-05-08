@@ -9,7 +9,7 @@
 ---
 
 ##  Overview
-Product review with Explainable AI using LIME and SHAP
+Product Review Sentiment Analysis with Explainable AI (LIME, SHAP) using Streamlit
 
 This project is an **interactive Machine Learning web application** built with **Streamlit** that performs sentiment analysis on text input and explains predictions using **LIME** and **SHAP**.
 
