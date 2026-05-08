@@ -7,98 +7,162 @@ from explain.lime_explainer import explain_lime
 from explain.shap_explainer import explain_shap
 
 
-st.title("🧠 Sentiment Analysis App with Explainability")
+# ------------------ PAGE CONFIG ------------------
+st.set_page_config(
+    page_title="Sentiment AI Dashboard",
+    page_icon="",
+    layout="wide"
+)
 
-text = st.text_area("Enter your review:")
+# ------------------ SIDEBAR ------------------
+st.sidebar.title("AI Dashboard")
 
+page = st.sidebar.radio(
+    "Navigation",
+    ["🏠 Dashboard", "📊 Explainability", "ℹ️ About"]
+)
 
-# ------------------ SHAP PLOT ------------------
-def plot_shap(feature_importance):
+st.sidebar.markdown("---")
+st.sidebar.info("Built with Streamlit + LIME + SHAP")
 
-    if len(feature_importance) == 0:
-        st.warning("No important features found for this input.")
-        return
-
-    words = [x[0] for x in feature_importance]
-    values = [x[1] for x in feature_importance]
-
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.barh(words, values)
-
-    ax.set_title("SHAP Explanation")
-    ax.set_xlabel("Impact")
-    ax.axvline(0)
-
-    st.pyplot(fig)
+# ------------------ LOAD MODEL (cache later optional) ------------------
+model, vectorizer = load_model()
 
 
-# ------------------ LIME PLOT ------------------
-def plot_lime(words, values):
-    sorted_idx = np.argsort(values)
+# ================== DASHBOARD PAGE ==================
+if page == "🏠 Dashboard":
 
-    words = np.array(words)[sorted_idx]
-    values = np.array(values)[sorted_idx]
+    st.title("Sentiment Analysis Dashboard")
 
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.barh(words, values)
+    text = st.text_area("Enter your review:", height=150)
 
-    ax.set_title("LIME Explanation")
-    ax.set_xlabel("Importance")
-    ax.axvline(0, color='black', linewidth=1)
+    if st.button("Analyze"):
 
-    st.pyplot(fig)
-
-
-# ------------------ MAIN APP ------------------
-if st.button("Predict"):
-
-    if not text.strip():
-        st.warning("Please enter some text.")
-    else:
-        model, vectorizer = load_model()
-
-        # normalize input
-        text_clean = text.lower().strip()
-
-        # Prediction
-        result = predict(text_clean)
-        st.subheader(f"Prediction: {result}")
-
-        proba = model.predict_proba(vectorizer.transform([text_clean]))[0]
-        confidence = max(proba)
-
-        st.metric("Confidence", f"{confidence*100:.2f}%")
-
-        # ------------------ LIME ------------------
-        st.subheader("📊 LIME Explanation")
-
-        lime_exp = explain_lime(text_clean, model, vectorizer)
-        lime_list = lime_exp.as_list()
-
-        if len(lime_list) == 0:
-            st.warning("LIME could not generate explanation.")
+        if not text.strip():
+            st.warning("Please enter text.")
         else:
-            words = [x[0] for x in lime_list]
-            values = [x[1] for x in lime_list]
+            text_clean = text.lower().strip()
 
-            plot_lime(words, values)
+            result = predict(text_clean)
+            proba = model.predict_proba(vectorizer.transform([text_clean]))[0]
+            confidence = max(proba)
 
-            with st.expander("Raw LIME values"):
-                st.write(lime_list)
+            col1, col2, col3 = st.columns(3)
 
-        # ------------------ SHAP ------------------
-        st.subheader("📈 SHAP Explanation")
+            with col1:
+                st.metric("Prediction", result)
 
-        try:
-            shap_data = explain_shap(text_clean, model, vectorizer)
+            with col2:
+                st.metric("Confidence", f"{confidence*100:.2f}%")
 
-            if len(shap_data) == 0:
-                st.warning("SHAP could not generate explanation for this input.")
-            else:
-                plot_shap(shap_data)
+            with col3:
+                st.metric("Model", "Logistic Regression")
 
-                with st.expander("Raw SHAP values"):
-                    st.write(shap_data)
+            st.success(f"Processed: {text_clean}")
 
-        except Exception as e:
-            st.warning(f"SHAP failed: {e}")
+
+# ================== EXPLAINABILITY PAGE ==================
+elif page == "📊 Explainability":
+
+    st.title("Model Explainability (LIME + SHAP)")
+
+    text = st.text_area("Enter text for explanation:", height=120)
+
+    if st.button("Explain"):
+
+        if not text.strip():
+            st.warning("Enter text first.")
+        else:
+            text_clean = text.lower().strip()
+
+            col1, col2 = st.columns(2)
+
+            # ------------------ LIME ------------------
+            with col1:
+                st.subheader("LIME")
+
+                lime_list = explain_lime(text_clean, model, vectorizer)
+
+                if len(lime_list) == 0:
+                    st.warning("No LIME explanation.")
+                else:
+                    words = [x[0] for x in lime_list]
+                    values = [x[1] for x in lime_list]
+
+                    fig, ax = plt.subplots(figsize=(5, 4))
+                    sorted_idx = np.argsort(values)
+
+                    words = np.array(words)[sorted_idx]
+                    values = np.array(values)[sorted_idx]
+
+                    ax.barh(words, values)
+                    ax.set_title("LIME Explanation")
+
+                    st.pyplot(fig)
+
+                    with st.expander("Raw LIME"):
+                        st.write(lime_list)
+
+            # ------------------ SHAP ------------------
+            with col2:
+                st.subheader("SHAP")
+
+                try:
+                    shap_data = explain_shap(text_clean, model, vectorizer)
+
+                    if len(shap_data) == 0:
+                        st.warning("No SHAP explanation.")
+                    else:
+                        words = [x[0] for x in shap_data]
+                        values = [x[1] for x in shap_data]
+
+                        fig, ax = plt.subplots(figsize=(5, 4))
+                        ax.barh(words, values)
+                        ax.set_title("SHAP Explanation")
+
+                        st.pyplot(fig)
+
+                        with st.expander("Raw SHAP"):
+                            st.write(shap_data)
+
+                except Exception as e:
+                    st.error(f"SHAP error: {e}")
+
+
+# ================== ABOUT PAGE ==================
+elif page == "ℹ️ About":
+
+    st.title("About This Project")
+
+    st.markdown("""
+    ### Sentiment Analysis AI App
+
+    This project demonstrates:
+    - Machine Learning (Logistic Regression)
+    - TF-IDF Text Vectorization
+    - Model Explainability (LIME + SHAP)
+    - Streamlit Web App UI
+
+    ---
+
+    ### Tech Stack
+    - Python
+    - Scikit-learn
+    - Streamlit
+    - LIME
+    - SHAP
+
+    ---
+
+    ### Features
+    - Sentiment Prediction (Positive / Negative)
+    - Confidence Score
+    - LIME Explanation
+    - SHAP Explanation
+    - Interactive Dashboard UI
+
+    ---
+
+    ### Goal
+    Turn ML notebook → real-world AI product demo
+    """)

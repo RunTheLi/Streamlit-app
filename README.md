@@ -1,4 +1,4 @@
-# 🧠 Sentiment Analysis App with Explainable AI (LIME + SHAP)
+#  Sentiment Analysis App with Explainable AI (LIME + SHAP)
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
@@ -8,7 +8,7 @@
 
 ---
 
-## 🚀 Overview
+##  Overview
 
 This project is an **interactive Machine Learning web application** built with **Streamlit** that performs sentiment analysis on text input and explains predictions using **LIME** and **SHAP**.
 
@@ -18,14 +18,14 @@ It transforms a traditional ML notebook into a **real-world AI product demo** wi
 
 ## Features
 
-- 🧠 Sentiment classification (Positive / Negative)
-- 📊 Model explainability using:
+-  Sentiment classification (Positive / Negative)
+-  Model explainability using:
   - LIME (Local Interpretability)
   - SHAP (Feature importance analysis)
-- 📈 Confidence score display
-- 🖥️ Dashboard-style UI with sidebar navigation
-- ⚡ Fast predictions using Logistic Regression + TF-IDF
-- 📉 Interactive visualizations (bar charts)
+-  Confidence score display
+-  Dashboard-style UI with sidebar navigation
+-  Fast predictions using Logistic Regression + TF-IDF
+-  Interactive visualizations (bar charts)
 
 ---
 
@@ -63,28 +63,28 @@ Explainability Layer
 ### Dashboard View
 > Sentiment prediction with confidence score
 
-![Dashboard](images/dashboard.png)
+![Dashboard](/home/lanma/Coding/python/Streamlit-app/Pictures/Dash_board.PNG)
 
 ---
 
 ### LIME Explanation
 > Shows word-level importance for prediction
 
-![LIME](images/lime.png)
+![LIME](/home/lanma/Coding/python/Streamlit-app/Pictures/Lime.PNG)
 
 ---
 
 ### SHAP Explanation
 > Feature impact visualization
 
-![SHAP](images/shap.png)
+![SHAP](/home/lanma/Coding/python/Streamlit-app/Pictures/Shap.PNG)
 
 ---
 
 ### Sidebar Navigation (SaaS-style UI)
 > Multi-page dashboard structure
 
-![Sidebar](images/sidebar.png)
+![Sidebar](/home/lanma/Coding/python/Streamlit-app/Pictures/Side_bar.PNG)
 
 ---
 

@@ -31,7 +31,8 @@ if __name__ == "__main__":
         "good", "very good", "excellent", "amazing", "great",
         "bad", "very bad", "terrible", "worst",
 
-        "very satisfied", "not satisfied", "satisfied", "unsatisfied"
+        "very satisfied", "not satisfied", "satisfied", "unsatisfied", "fantastic",
+        "overrate", "underrate","hoax", "like", "lie", "love", "hate"
     ]
 
     y = [
@@ -41,7 +42,8 @@ if __name__ == "__main__":
         1,1,1,1,1,
         0,0,0,0,
 
-        1,0,1,0
+        1,0,1,0,1,
+        0,1,0,1,0,1,0
     ]
 
     train_model(X, y)
