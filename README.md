@@ -96,4 +96,4 @@ cd sentiment-xai-app
 
 pip install -r requirements.txt
 
-
+to run project -> streamlit run app.py
