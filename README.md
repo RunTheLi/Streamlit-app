@@ -63,28 +63,28 @@ Explainability Layer
 ### Dashboard View
 > Sentiment prediction with confidence score
 
-![Dashboard](/home/lanma/Coding/python/Streamlit-app/Pictures/Dash_board.PNG)
+![Dashboard](Pictures/Dash_board.PNG)
 
 ---
 
 ### LIME Explanation
 > Shows word-level importance for prediction
 
-![LIME](/home/lanma/Coding/python/Streamlit-app/Pictures/Lime.PNG)
+![LIME](Pictures/Lime.PNG)
 
 ---
 
 ### SHAP Explanation
 > Feature impact visualization
 
-![SHAP](/home/lanma/Coding/python/Streamlit-app/Pictures/Shap.PNG)
+![SHAP](Pictures/Lime.PNG)
 
 ---
 
 ### Sidebar Navigation (SaaS-style UI)
 > Multi-page dashboard structure
 
-![Sidebar](/home/lanma/Coding/python/Streamlit-app/Pictures/Side_bar.PNG)
+![Sidebar](Pictures/Side_bar.PNG)
 
 ---
 
